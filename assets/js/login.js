@@ -27,4 +27,57 @@ $(function () {
       }
     }
   })
+
+  // 从layui中获取layer（提示）对象
+  var layer = layui.layer
+  // 监听注册表单的提交事件
+  $('#form_reg').on('submit', function (e) {
+    // 阻止默认的提交行为
+    e.preventDefault();
+    // 发起Ajax的post请求
+    $.post(
+      '/api/reguser',
+      {
+        username: $('#form_reg [name=username]').val(),
+        password: $('#form_reg [name=password]').val()
+      },
+      function (res) {
+        if (res.status !== 0) {
+          // return console.log(res.message)
+          return layer.msg(res.message)
+        }
+        // console.log(res.message)
+        layer.msg('注册成功，请登录。')
+        // 模拟点击了“去登录”按钮
+        $('#to_login').click();
+      })
+  })
+
+  // 监听登录表单的提交事件
+  $('#form_login').submit(function (e) {
+    // 阻止默认的提交行为
+    e.preventDefault();
+    // 发起Ajax请求
+    $.ajax({
+      url: '/api/login',
+      method: 'POST',
+      // 快速获取表单中的数据
+      data: $(this).serialize(),
+      success: function (res) {
+        if (res.status !== 0) {
+          return layer.msg('登录失败TT')
+        }
+        layer.msg('登录成功！')
+
+        // console.log(res.token); //Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA4MTIsInVzZXJuYW1lIjoicWF6MTEiLCJwYXNzd29yZCI6IiIsIm5pY2tuYW1lIjoiIiwiZW1haWwiOiIiLCJ1c2VyX3BpYyI6IiIsImlhdCI6MTYyNDc4NDg0NSwiZXhwIjoxNjI0ODIwODQ1fQ.qU8kYyJUDqxTvRvQu2tTM7s9ayglT_TjXKHBjqRX34c
+        // 用户名qaz11 密码111111
+
+        // 把登录成功后得到的token字符串保存到localStorage中
+        localStorage.setItem('token', res.token);
+        // 跳转到后台主页
+        location.href = '/index.html'
+      }
+    })
+  })
+
 })
