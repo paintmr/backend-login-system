@@ -35,7 +35,7 @@
               <dd><a href="">基本资料</a></dd>
               <dd><a href="">更换头像</a></dd>
               <dd><a href="">重置密码</a></dd>
-              <dd><a href="">安全退出</a></dd>
+              <dd><a href="javascript:;" id="btnLogout">安全退出</a></dd>
             </dl>
           </li>
           <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
@@ -121,7 +121,15 @@
         @ www.xxxxxx.com iCoding
       </div>
     </div>
-    <script src="./assets/lib/layui/layui.js"></script>
+    <!-- 导入layui的js文件 要用layui.all.js，否则点击退出时，无法弹出对话框。或者说，如果没有layui.all.js，layui.layer是undefined-->
+    <!-- <script src="./assets/lib/layui/layui.js"></script> -->
+    <script src="./assets/lib/layui/layui.all.js"></script>
+
+    <!-- 导入jQuery -->
+    <script src="./assets/lib/jquery.js"></script>
+    <!-- 导入自己写的js文件 -->
+    <script src="./assets/js/baseAPI.js"></script>
+    <script src="./assets/js/index.js"></script>
     <script>
       //JS
       layui.use(["element", "layer", "util"], function () {
