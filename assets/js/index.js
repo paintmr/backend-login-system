@@ -32,6 +32,7 @@ function getUserInfo() {
       // 调用renderAvatar函数渲染用户头像
       renderAvatar(res.data)
     },
+    // 不论是否成功拿到数据，之后都会执行complete函数
     // complete: function (res) {
     //   // console.log('执行了complete回调');
     //   // console.log(res);
