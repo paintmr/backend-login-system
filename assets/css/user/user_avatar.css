@@ -1,0 +1,62 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  padding: 15px;
+  background-color: #f2f3f5;
+}
+
+/* 設置卡片主體區域的寬度 */
+.layui-card-body {
+  width: 500px;
+}
+/* 設置按鈕行的樣式 */
+.row2 {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+/* 設置裁剪區域的樣式 */
+.cropper-box {
+  width: 350px;
+  height: 350px;
+  background-color: cyan;
+  overflow: hidden;
+}
+/* 設置第一個預覽區域的樣式 */
+.w100 {
+  width: 100px;
+  height: 100px;
+  background-color: gray;
+}
+/* 設置第二個預覽區域的樣式 */
+.w50 {
+  width: 50px;
+  height: 50px;
+  background-color: gray;
+  margin-top: 50px;
+}
+/* 設置預覽區域下方文本的樣式 */
+.size {
+  font-size: 12px;
+  color: gray;
+  text-align: center;
+}
+/* 設置圖片行的樣式 */
+.row1 {
+  display: flex;
+}
+/* 設置 preview-box 區域的的樣式 */
+.preview-box {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+}
+/* 設置 img-preview 區域的樣式 */
+.img-preview {
+  overflow: hidden;
+  border-radius: 50%;
+}
