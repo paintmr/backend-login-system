@@ -38,15 +38,15 @@
           </thead>
           <tbody>
             <!-- <tr>
-              <td>贤心</td>
+              <td>岑参</td>
               <td>2016-11-29</td>
-              <td>人生就像是一场修行</td>
+              <td>一生大笑能几回，斗酒相逢须醉倒。</td>
             </tr>
             <tr>
-              <td>许闲心</td>
+              <td>李白</td>
               <td>2016-11-28</td>
               <td>
-                于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…
+                大鹏一日同风起，扶摇直上九万里。
               </td>
             </tr> -->
           </tbody>
@@ -61,8 +61,18 @@
         <td>{{$value.name}}</td>
         <td>{{$value.alias}}</td>
         <td>
-          <button type="button" class="layui-btn layui-btn-xs">编辑</button>
-          <button type="button" class="layui-btn layui-btn-danger layui-btn-xs">
+          <button
+            type="button"
+            class="layui-btn layui-btn-xs btn-edit"
+            data-id="{{$value.Id}}"
+          >
+            编辑
+          </button>
+          <button
+            type="button"
+            class="layui-btn layui-btn-danger layui-btn-xs btn-delete"
+            data-id="{{$value.Id}}"
+          >
             删除
           </button>
         </td>
@@ -70,7 +80,7 @@
       {{/each}}
     </script>
 
-    <!-- 弹出层的form表单 -->
+    <!-- 添加弹出层的form表单 -->
     <script type="text/html" id="dialog-add">
       <form class="layui-form" id="form-add">
         <div class="layui-form-item">
@@ -108,6 +118,49 @@
             </button>
             <button type="reset" class="layui-btn layui-btn-primary">
               重置
+            </button>
+          </div>
+        </div>
+      </form>
+    </script>
+
+    <!-- 编辑弹出层的form表单 -->
+    <script type="text/html" id="dialog-edit">
+      <form class="layui-form" id="form-edit" lay-filter="form-edit">
+        <!-- 隐藏域，保存id的值 -->
+        <input type="hidden" name="Id" />
+        <div class="layui-form-item">
+          <label class="layui-form-label">分类名称</label>
+          <div class="layui-input-block">
+            <input
+              type="text"
+              name="name"
+              required
+              lay-verify="required"
+              placeholder="请输入分类名称"
+              autocomplete="off"
+              class="layui-input"
+            />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">分类别名</label>
+          <div class="layui-input-block">
+            <input
+              type="text"
+              name="alias"
+              required
+              lay-verify="required"
+              placeholder="请输入分类别名"
+              autocomplete="off"
+              class="layui-input"
+            />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">
+              确认修改
             </button>
           </div>
         </div>
