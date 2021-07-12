@@ -1,6 +1,6 @@
 $(function () {
   // 定义一个查询的参数对象，将来请求数据的时候，需要将请求参数对象提交到服务器。
-  var datap = {
+  var dataP = {
     pagenum: 1,  //页码值，默认请求第一页的
     pagesize: 2, //每页显示几条数据, 默认每页显示2条
     cate_id: '', //文章分类的id
@@ -34,9 +34,9 @@ $(function () {
     $.ajax({
       method: 'GET',
       url: '/my/article/list',
-      data: datap,
+      data: dataP,
       success: function (res) {
-        console.log(res);
+        // console.log(res);
         if (res.status !== 0) {
           return layer.msg('获取文章列表失败TT')
         }
@@ -46,4 +46,39 @@ $(function () {
       }
     })
   }
+
+  initCate()
+  // 初始化文章分类的方法
+  var form = layui.form
+  function initCate() {
+    $.ajax({
+      method: 'GET',
+      url: '/my/article/cates',
+      success: function (res) {
+        if (res.status !== 0) {
+          return layer.msg('获取分类数据失败TT')
+        }
+        // 调用模板引擎渲染分类的可选项目
+        var htmlStr = template('tpl-cate', res)
+        // console.log(htmlStr);
+        $('[name=cate_id]').html(htmlStr)
+        // 要告诉layui重新渲染一下表单区域的UI结构，否则下拉菜单是空的。
+        form.render();
+      }
+    })
+  }
+
+  // 为筛选表单绑定submit事件
+  $('#form-search').on('submit', function (e) {
+    e.preventDefault();
+    // 获取表单中选中项的值
+    var cate_id = $('[name=cate_id]').val()
+    var state = $('[name=state]').val()
+    // 为查询参数对象dataP中对应的属性赋值
+    dataP.cate_id = cate_id
+    dataP.state = state
+    // 根据新的筛选条件dataP，重新渲染表格的数据
+    initTable()
+  })
+
 })
