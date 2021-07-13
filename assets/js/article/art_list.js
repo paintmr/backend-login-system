@@ -29,7 +29,7 @@ $(function () {
   }
 
   initTable()
-  // 获取文字列表数据的方法
+  // 获取文章列表数据的方法
   function initTable() {
     $.ajax({
       method: 'GET',
