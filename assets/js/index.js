@@ -64,4 +64,7 @@ function renderAvatar(user) {
     $('.layui-nav-img').hide()
 
   }
+
+  // 设置一个全局变量，以备在art_list.js中修改文章。点击了那篇文章，就把文章的id值赋值给artId
+  var artId
 }

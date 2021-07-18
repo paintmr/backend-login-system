@@ -60,7 +60,7 @@ $(function () {
     });
 
     var id = $(this).attr('data-id')
-    console.log(id);
+    // console.log(id);
     $.ajax({
       method: 'GET',
       url: '/my/article/cates/' + id,
@@ -79,8 +79,8 @@ $(function () {
       url: '/my/article/updatecate',
       data: $(this).serialize(),
       success: function (res) {
-        console.log($(this));
-        console.log(res);
+        // console.log($(this));
+        // console.log(res);
         if (res.status !== 0) {
           return layer.msg('更新分类数据失败TT')
         }

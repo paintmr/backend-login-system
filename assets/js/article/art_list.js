@@ -81,4 +81,21 @@ $(function () {
     initTable()
   })
 
+
+  // 用代理的方法，为文章的编辑按钮绑定点击事件
+  $('tbody').on('click', '.art-edit', function () {
+    // 进入到发布文章页面，并且把该篇文章的数据显示在页面上
+
+    // 拿到文章id，并保留到全局变量artId中，以备art_pub.js请求数据时使用
+    window.parent.artId = $(this).attr('data-id')
+    // console.log(id);
+    //  $('#pub_art', window.parent.document)  这是找出父页面中id为pub_art的元素：侧边栏“文章管理”中的“发布文章”。把“发布文章”选中，“文章列表”去掉选中样式
+    $('#pub_art', window.parent.document).parent().addClass('layui-this').siblings().removeClass('layui-this')
+    // 进入到发布文章页面
+    location.href = '/article/art_pub.html'
+
+
+
+  })
+
 })

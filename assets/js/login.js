@@ -69,7 +69,7 @@ $(function () {
         }
         layer.msg('登录成功！')
 
-        // console.log(res.token); //Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA4MTIsInVzZXJuYW1lIjoicWF6MTEiLCJwYXNzd29yZCI6IiIsIm5pY2tuYW1lIjoiIiwiZW1haWwiOiIiLCJ1c2VyX3BpYyI6IiIsImlhdCI6MTYyNDc4NDg0NSwiZXhwIjoxNjI0ODIwODQ1fQ.qU8kYyJUDqxTvRvQu2tTM7s9ayglT_TjXKHBjqRX34c
+        // console.log(res.token);
         // 用户名qaz11 密码111111
 
         // 把登录成功后得到的token字符串保存到localStorage中

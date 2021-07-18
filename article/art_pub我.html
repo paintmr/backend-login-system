@@ -15,11 +15,9 @@
       <div class="layui-card-header">写文章</div>
       <div class="layui-card-body">
         <!-- 发表文章的表单 -->
-        <form class="layui-form" id="form-pub" lay-filter="form-pub">
-          <!-- 隐藏域 -->
+        <form class="layui-form" id="form-pub">
+          <!-- 隐藏域，保存id的值 -->
           <input type="hidden" name="Id" />
-          <input type="hidden" name="author_id" />
-          <input type="hidden" name="is_delete" />
           <!-- 第一行 -->
           <div class="layui-form-item">
             <label class="layui-form-label">文章标题</label>
@@ -49,7 +47,6 @@
               </select>
             </div>
           </div>
-
           <!-- 第三行 富文本编辑器 -->
           <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">文本域</label>
@@ -112,7 +109,7 @@
 
     <!-- 分类可选项的模板结构 -->
     <script type="text/html" id="tpl-cate">
-      <option value="" id="artCateDe">请选择文章类别</option>
+      <option value="">请选择文章类别</option>
       {{each data}}
       <option value="{{$value.Id}}">{{$value.name}}</option>
       {{/each}}
@@ -129,8 +126,8 @@
     <!-- 使用cropper绘制上传图片的区域 -->
     <script src="/assets/lib/cropper/Cropper.js"></script>
     <script src="/assets/lib/cropper/jquery-cropper.js"></script>
-
     <!-- 导入自己的JS -->
+    <script src="/assets/js/article/art_list.js"></script>
     <script src="/assets/js/article/art_pub.js"></script>
   </body>
 </html>

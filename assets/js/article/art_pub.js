@@ -14,7 +14,8 @@ $(function () {
         }
         // 调用模板引擎，渲染分类的下拉菜单
         var htmlStr = template('tpl-cate', res)
-        $('[name=cate_id]').html(htmlStr)
+        // console.log(htmlStr);
+        $('[name="cate_id"]').html(htmlStr)
         // 要告诉layui重新渲染一下表单区域的UI结构，否则下拉菜单是空的。
         form.render();
       }
@@ -35,7 +36,7 @@ $(function () {
   // 3. 初始化裁剪区域
   $image.cropper(options)
 
-  // 为选择封面的按钮绑定点击事件处理桉树
+  // 为选择封面的按钮绑定点击事件处理函数
   $('#btnChooseImage').on('click', function () {
     $('#coverFile').click()
   })
@@ -50,6 +51,7 @@ $(function () {
     }
     // 根据文件，创建对应的URL地址
     var newImgURL = URL.createObjectURL(files[0])
+    console.log(newImgURL);
     // 为裁剪区域重新设置图片
     $image
       .cropper('destroy') // 销毁旧的裁剪区域
@@ -108,8 +110,47 @@ $(function () {
         layer.msg('发布文章成功！')
         // 发布文章成功后，跳转到文章列表页面
         location.href = '/article/art_list.html'
+        //  $('#list_art', window.parent.document)  这是找出父页面中id为list_art的元素：侧边栏“文章管理”中的“文章列表”。把“文章列表”选中，“发布文章”去掉选中样式
+        $('#list_art', window.parent.document).parent().addClass('layui-this').siblings().removeClass('layui-this')
+
       }
     })
+  }
+
+  // 如果是从art_list.js点击了编辑按钮跳转过来的
+  if (window.parent.artId) {
+    $.ajax({
+      method: 'GET',
+      url: '/my/article/' + window.parent.artId,
+      success: function (res) {
+        console.log(res.data);
+        var artCateId = res.data.cate_id
+        // 根据cate_id获取文章分类名称
+        $.ajax({
+          method: 'GET',
+          url: '/my/article/cates/' + artCateId,
+          success: function (res) {
+            // console.log(res);
+            $('#artCateDe').html(res.data.name);
+            // console.log($('#artCateDe'));
+            form.render();
+          }
+        })
+
+        // 设置图片
+        // 为裁剪区域重新设置图片
+        var artImgURL = 'http://api-breakingnews-web.itheima.net' + res.data.cover_img
+        $image
+          .cropper('destroy') // 销毁旧的裁剪区域
+          .attr('src', artImgURL) // 重新设置图片路径
+          .cropper(options) // 重新初始化裁剪区域
+
+        // 把其它数据放入form表单中
+        // form.val('form-pub', res.data) //这种方式无法把数据放入form中
+        form.val('form-pub', JSON.parse(JSON.stringify(res.data)))
+      }
+    })
+    window.parent.artId = null;
   }
 
 })
