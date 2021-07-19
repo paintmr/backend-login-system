@@ -43,6 +43,8 @@ $(function () {
         // 使用模板引擎渲染页面数据
         var htmlStr = template('tpl-table', res)
         $('tbody').html(htmlStr);
+        // 调用渲染分页的方法
+        renderPage(res.total)
       }
     })
   }
@@ -93,9 +95,61 @@ $(function () {
     $('#pub_art', window.parent.document).parent().addClass('layui-this').siblings().removeClass('layui-this')
     // 进入到发布文章页面
     location.href = '/article/art_pub.html'
+  })
 
+  // 定义渲染分页的方法
+  var laypage = layui.laypage
+  function renderPage(total) {
+    // 调用laypage.render()方法来渲染分页的结构
+    laypage.render({
+      elem: 'pageBox', //注意，这里的 pageBox 是 ID，不用加 # 号
+      count: total, //数据总数，从服务端得到
+      limit: dataP.pagesize, //每页显示几条数据
+      curr: dataP.pagenum, //默认选中哪一页，一般默认选中第1页
+      layout: ['count', 'limit', 'prev', 'page', 'next', 'skip'],
+      limits: [2, 3, 5, 10],
+      // 两种情况触发jump函数：（1）只要执行laypage.render（包括第1次加载页面时），就会触发jump.（2）点击切换页码时，触发jump回调函数，（3）点击下拉框，选择每页显示几条，也会触发jump。
+      // jump回调函数中有个参数是first，只有在包括第1次加载页面时first===true，其它情况下是undefined
+      jump: function (obj, first) {
+        // 把最新的页码值赋值到dataP这个查询参数对象中
+        dataP.pagenum = obj.curr
+        // 把最新的每页显示多少条的数据赋值到dataP上
+        dataP.pagesize = obj.limit
+        // 根据最新的dataP请求文章列表数据。如果直接在这里调用initTable()，会导致死循环。要先判断jump是被那种方式触发的：第1次加载页面，还是用户点击了页码？
+        if (!first) {
+          initTable()
+        }
+      }
+    })
+  }
 
-
+  // 删除文章
+  // 通过代理的形式，为删除按钮绑定点击事件
+  $('tbody').on('click', '.art-delete', function () {
+    // 获取被点击的文章的id
+    var id = $(this).attr('data-id')
+    layer.confirm('确认删除？', { icon: 3, title: '提示' }, function (index) {
+      $.ajax({
+        method: 'GET',
+        url: '/my/article/delete/' + id,
+        success: function (res) {
+          if (res.status !== 0) {
+            return layer.msg('删除文章失败TT')
+          }
+          layer.msg('删除文章成功！')
+          // 判斷一下當前頁碼是否還有數據，如果無數據，把當前頁碼值減1，再去請求文章列表數據。
+          // 获取删除按钮的个数
+          var delBtns = $('.art-delete').length
+          // 如果len的值等于1，删除完毕后，页面上无任何数据，把当前页码值-1，再调用initTable()
+          // 页码值最小必须是1
+          if (delBtns === 1) {
+            dataP.pagenum = dataP.pagenum === 1 ? 1 : dataP.pagenum - 1
+          }
+          initTable()
+        }
+      })
+      layer.close(index);
+    });
   })
 
 })
