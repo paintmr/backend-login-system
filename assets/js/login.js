@@ -14,7 +14,7 @@ $(function () {
 
   // 从layui中获取form对象。和jQuery类似。导入jQuery文件，就可以使用$对象；导入了layui的js文件，即可使用layui对象
   var form = layui.form
-  // 通过form.verify()函数自定义校验规则
+  // 通过form.verify()函数自定义校验规则，比如下面的pwd和repwd，然后把这些规则放到login.html页面中去
   form.verify({
     // 自定义一个叫做pwd的校验规则。^[\S]表示非空格的字符
     pwd: [/^[\S]{6,12}$/, '密码必须6-12位，不能出现空格'],

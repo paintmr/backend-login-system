@@ -1,4 +1,10 @@
 $(function () {
+  // 如果用户没有登录，自行输入了index.html，则让用户跳转到login.html页面去登录或者注册
+  if (!localStorage.getItem('token')) {
+    location.href = '/login.html'
+  }
+
+
   // 调用getUserInfo获取用户基本信息
   getUserInfo()
 
@@ -14,6 +20,9 @@ $(function () {
       layer.close(index);
     });
   })
+
+  // 设置一个全局变量，以备在art_list.js中修改文章。点击了哪篇文章，就把文章的id值赋值给artId
+  var artId
 })
 
 // 获取用户的基本信息的函数
@@ -64,7 +73,4 @@ function renderAvatar(user) {
     $('.layui-nav-img').hide()
 
   }
-
-  // 设置一个全局变量，以备在art_list.js中修改文章。点击了那篇文章，就把文章的id值赋值给artId
-  var artId
 }
