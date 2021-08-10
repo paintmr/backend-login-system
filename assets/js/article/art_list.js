@@ -33,7 +33,7 @@ $(function () {
   function initTable() {
     $.ajax({
       method: 'GET',
-      url: '/my/article/list',
+      url: '/my/article/artlist',
       data: dataP,
       success: function (res) {
         // console.log(res);
@@ -55,7 +55,7 @@ $(function () {
   function initCate() {
     $.ajax({
       method: 'GET',
-      url: '/my/article/cates',
+      url: '/my/artcate/catelist',
       success: function (res) {
         if (res.status !== 0) {
           return layer.msg('获取分类数据失败TT')
@@ -131,7 +131,7 @@ $(function () {
     layer.confirm('确认删除？', { icon: 3, title: '提示' }, function (index) {
       $.ajax({
         method: 'GET',
-        url: '/my/article/delete/' + id,
+        url: '/my/article/deleteart/' + id,
         success: function (res) {
           if (res.status !== 0) {
             return layer.msg('删除文章失败TT')

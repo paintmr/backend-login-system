@@ -7,7 +7,7 @@ $(function () {
   function initCate() {
     $.ajax({
       method: 'GET',
-      url: '/my/article/cates',
+      url: '/my/artcate/catelist',
       success: function (res) {
         if (res.status !== 0) {
           return layer.msg('初始化文章分类失败TT')
@@ -41,7 +41,7 @@ $(function () {
     $('#coverFile').click()
   })
 
-  // 监听coverFile的change事件，获取用户选择的文件列表
+  // 为上传文件的input绑定change事件。监听coverFile的change事件，获取用户选择的文件列表
   $('#coverFile').on('change', function (e) {
     // 获取到文件的列表数组
     var files = e.target.files
@@ -51,6 +51,9 @@ $(function () {
     }
     // 根据文件，创建对应的URL地址
     var newImgURL = URL.createObjectURL(files[0])
+    // console.log(files[0]);
+    // console.log(typeof newImgURL);
+    // console.log(newImgURL);
     // 为裁剪区域重新设置图片
     $image
       .cropper('destroy') // 销毁旧的裁剪区域
@@ -83,19 +86,18 @@ $(function () {
         // 得到文件对象后，进行后续的操作
         // 将文件对象存储到fd中
         fd.append('cover_img', blob)
-        // console.log(blob);
 
         // 看情况是新发文章还是编辑文章提交
         if (artId) {
           // 发起编辑文章的ajax数据请求
-          var url = '/my/article/edit'
+          var url = '/my/article/updateart'
           var msg = {
             success: '编辑文章成功！',
             failure: '编辑文章失败TT'
           }
         } else {
           // 发起新发文章的ajax数据请求
-          var url = '/my/article/add'
+          var url = '/my/article/addart'
           var msg = {
             success: '发布文章成功！',
             failure: '发布文章失败TT'
@@ -127,8 +129,8 @@ $(function () {
         layer.msg(msg.success)
         // 清除全局的单篇文章标记
         artId = null;
-        // 发布文章成功后，跳转到文章列表页面
-        location.href = '/article/art_list.html'
+        // 发布文章成功后，跳转到文章列表页面。设定一个计时器，这样可以让修改成功的提示显示出来，再跳转。
+        setTimeout("location.href = '/article/art_list.html'", 1000)
         //  $('#list_art', window.parent.document)  这是找出父页面中id为list_art的元素：侧边栏“文章管理”中的“文章列表”。把“文章列表”选中，“发布文章”去掉选中样式
         $('#list_art', window.parent.document).parent().addClass('layui-this').siblings().removeClass('layui-this')
       }
@@ -149,7 +151,7 @@ $(function () {
         var artCateId = res.data.cate_id
         $.ajax({
           method: 'GET',
-          url: '/my/article/cates/' + artCateId,
+          url: '/my/artcate/cate/' + artCateId,
           success: function (res) {
             artCateId = artCateId + '';
             for (let i = 0; i < $('#artCate')[0].length; i++) {
@@ -164,7 +166,10 @@ $(function () {
 
         // 设置图片
         // 为裁剪区域重新设置图片
-        var artImgURL = 'http://api-breakingnews-web.itheima.net' + res.data.cover_img
+        // var artImgURL = 'http://api-breakingnews-web.itheima.net' + res.data.cover_img
+        var artImgURL = 'http://127.0.0.1:3007/uploads/' + res.data.cover_img
+        var artImgURL = res.data.cover_img
+        console.log(artImgURL);
         $image
           .cropper('destroy') // 销毁旧的裁剪区域
           .attr('src', artImgURL) // 重新设置图片路径

@@ -4,8 +4,6 @@ $(function () {
     location.href = '/login.html'
   }
 
-
-  // 调用getUserInfo获取用户基本信息
   getUserInfo()
 
   // 点击安全退出
@@ -23,6 +21,7 @@ $(function () {
 
   // 设置一个全局变量，以备在art_list.js中修改文章。点击了哪篇文章，就把文章的id值赋值给artId
   var artId
+
 })
 
 // 获取用户的基本信息的函数
@@ -71,6 +70,5 @@ function renderAvatar(user) {
     var first = name[0].toUpperCase()
     $('.text-avatar').html(first).show()
     $('.layui-nav-img').hide()
-
   }
 }

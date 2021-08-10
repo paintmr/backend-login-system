@@ -15,6 +15,13 @@ $(function () {
   // 1.3 創建裁剪區域
   $image.cropper(options)
 
+  var currentSrc = $("#forChgAvt", parent.document)[0].currentSrc
+
+  $image
+    .cropper('destroy') // 销毁旧的裁剪区域
+    .attr('src', currentSrc) // 重新设置图片路径
+    .cropper(options) // 重新初始化裁剪区域
+
   // 点击上传图片：点击“上传”按钮，模拟点击file选择框
   $('#btnChooseImage').on('click', function () {
     $('#file').click();
