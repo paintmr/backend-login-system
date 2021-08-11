@@ -167,9 +167,8 @@ $(function () {
         // 设置图片
         // 为裁剪区域重新设置图片
         // var artImgURL = 'http://api-breakingnews-web.itheima.net' + res.data.cover_img
-        var artImgURL = 'http://127.0.0.1:3007/uploads/' + res.data.cover_img
-        var artImgURL = res.data.cover_img
-        console.log(artImgURL);
+        var artImgURL = 'http://127.0.0.1:3007' + res.data.cover_img
+
         $image
           .cropper('destroy') // 销毁旧的裁剪区域
           .attr('src', artImgURL) // 重新设置图片路径

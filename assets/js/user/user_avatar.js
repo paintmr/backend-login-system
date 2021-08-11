@@ -15,7 +15,7 @@ $(function () {
   // 1.3 創建裁剪區域
   $image.cropper(options)
 
-  var currentSrc = $("#forChgAvt", parent.document)[0].currentSrc
+  var currentSrc = $("#forChgAvt", parent.document)[0].style.display === 'none' ? '/assets/images/sample.jpg' : $("#forChgAvt", parent.document)[0].currentSrc
 
   $image
     .cropper('destroy') // 销毁旧的裁剪区域

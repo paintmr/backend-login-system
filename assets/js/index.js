@@ -5,7 +5,6 @@ $(function () {
   }
 
   getUserInfo()
-
   // 点击安全退出
   var layer = layui.layer;
   $('#btnLogout').on('click', function () {
