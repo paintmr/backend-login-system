@@ -2,7 +2,7 @@ $(function () {
   // 定义一个查询的参数对象，将来请求数据的时候，需要将请求参数对象提交到服务器。
   var dataP = {
     pagenum: 1,  //页码值，默认请求第一页的
-    pagesize: 2, //每页显示几条数据, 默认每页显示2条
+    pagesize: 3, //每页显示几条数据, 默认每页显示2条
     cate_id: '', //文章分类的id
     state: '', //文章的状态
   }
@@ -29,22 +29,35 @@ $(function () {
   }
 
   initTable()
-  // 获取文章列表数据的方法
+  // 获取文章列表数据的方法（获取显示的那一部分文章数据，没显示的不获取）
   function initTable() {
     $.ajax({
       method: 'GET',
-      url: '/my/article/artlist',
+      url: '/my/article/artlistshow',
       data: dataP,
-      success: function (res) {
-        // console.log(res);
-        if (res.status !== 0) {
+      success: function (artListShow) {
+        if (artListShow.status !== 0) {
           return layer.msg('获取文章列表失败TT')
         }
-        // 使用模板引擎渲染页面数据
-        var htmlStr = template('tpl-table', res)
-        $('tbody').html(htmlStr);
-        // 调用渲染分页的方法
-        renderPage(res.total)
+
+        // 根据cate_id获取文章分类名称
+        for (let i = 0; i < artListShow.data.length; i++) {
+          $.ajax({
+            method: 'GET',
+            url: '/my/artcate/cate/' + artListShow.data[i].cate_id,
+            success: function (Cate) {
+              artListShow.data[i].cate_name = Cate.data.name
+
+              // 下面的渲染必须放在最里面的这个success函数里面，否则cate_name这个字段还没被写入artListShow中，就会执行下面的渲染了。
+              if (i === artListShow.data.length - 1) {
+                // 使用模板引擎渲染页面数据
+                // 根据页码pagenum和每页显示条数pagesize确定要显示的文章
+                var htmlStr = template('tpl-table', artListShow)
+                $('tbody').html(htmlStr);
+              }
+            }
+          })
+        }
       }
     })
   }
@@ -70,33 +83,22 @@ $(function () {
     })
   }
 
-  // 为筛选表单绑定submit事件
-  $('#form-search').on('submit', function (e) {
-    e.preventDefault();
-    // 获取表单中选中项的值
-    var cate_id = $('[name=cate_id]').val()
-    var state = $('[name=state]').val()
-    // 为查询参数对象dataP中对应的属性赋值
-    dataP.cate_id = cate_id
-    dataP.state = state
-    // 根据新的筛选条件dataP，重新渲染表格的数据
-    initTable()
-  })
-
-
-  // 用代理的方法，为文章的编辑按钮绑定点击事件
-  $('tbody').on('click', '.art-edit', function () {
-    // 进入到发布文章页面，并且把该篇文章的数据显示在页面上
-
-    // 拿到文章id，并保留到全局变量artId中，以备art_pub.js请求数据时使用
-    window.parent.artId = $(this).attr('data-id')
-    // console.log(id);
-    //  $('#pub_art', window.parent.document)  这是找出父页面中id为pub_art的元素：侧边栏“文章管理”中的“发布文章”。把“发布文章”选中，“文章列表”去掉选中样式
-    $('#pub_art', window.parent.document).parent().addClass('layui-this').siblings().removeClass('layui-this')
-    // 进入到发布文章页面
-    location.href = '/article/art_pub.html'
-  })
-
+  // 获取所有文章的总数，以便调用渲染分页的方法
+  getArtAll()
+  function getArtAll() {
+    $.ajax({
+      method: 'GET',
+      url: '/my/article/artlistAll',
+      data: dataP,
+      success: function (artListAll) {
+        if (artListAll.status !== 0) {
+          return layer.msg('获取文章列表失败TT')
+        }
+        renderPage(artListAll.data)
+      }
+    })
+  }
+  // 调用渲染分页的方法
   // 定义渲染分页的方法
   var laypage = layui.laypage
   function renderPage(total) {
@@ -107,7 +109,7 @@ $(function () {
       limit: dataP.pagesize, //每页显示几条数据
       curr: dataP.pagenum, //默认选中哪一页，一般默认选中第1页
       layout: ['count', 'limit', 'prev', 'page', 'next', 'skip'],
-      limits: [2, 3, 5, 10],
+      limits: [3, 5, 10],
       // 两种情况触发jump函数：（1）只要执行laypage.render（包括第1次加载页面时），就会触发jump.（2）点击切换页码时，触发jump回调函数，（3）点击下拉框，选择每页显示几条，也会触发jump。
       // jump回调函数中有个参数是first，只有在包括第1次加载页面时first===true，其它情况下是undefined
       jump: function (obj, first) {
@@ -122,6 +124,33 @@ $(function () {
       }
     })
   }
+
+  // 为筛选表单绑定submit事件
+  $('#form-search').on('submit', function (e) {
+    e.preventDefault();
+    // 获取表单中选中项的值
+    var cate_id = $('[name=cate_id]').val()
+    var state = $('[name=state]').val()
+    // 为查询参数对象dataP中对应的属性赋值
+    dataP.cate_id = cate_id
+    dataP.state = state
+    // 根据新的筛选条件dataP，重新渲染表格的数据
+    initTable()
+    getArtAll()
+  })
+
+  // 用代理的方法，为文章的编辑按钮绑定点击事件
+  $('tbody').on('click', '.art-edit', function () {
+    // 进入到发布文章页面，并且把该篇文章的数据显示在页面上
+
+    // 拿到文章id，并保留到全局变量artId中，以备art_pub.js请求数据时使用
+    window.parent.artId = $(this).attr('data-id')
+    // console.log(id);
+    //  $('#pub_art', window.parent.document)  这是找出父页面中id为pub_art的元素：侧边栏“文章管理”中的“发布文章”。把“发布文章”选中，“文章列表”去掉选中样式
+    $('#pub_art', window.parent.document).parent().addClass('layui-this').siblings().removeClass('layui-this')
+    // 进入到发布文章页面
+    location.href = '/article/art_pub.html'
+  })
 
   // 删除文章
   // 通过代理的形式，为删除按钮绑定点击事件
