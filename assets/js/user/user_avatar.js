@@ -15,6 +15,7 @@ $(function () {
   // 1.3 創建裁剪區域
   $image.cropper(options)
 
+  // 看服务器端数据库里是否存了头像（index.js中请求用户资料时，返回的数据包含头像地址字段），有则用数据库的，没有则用本地样图。
   var currentSrc = $("#forChgAvt", parent.document)[0].style.display === 'none' ? '/assets/images/sample.jpg' : $("#forChgAvt", parent.document)[0].currentSrc
 
   $image

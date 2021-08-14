@@ -24,6 +24,7 @@ $(function () {
 })
 
 // 获取用户的基本信息的函数
+// 这个function要写在$(function(){})的外面，否则更换头像时，子页面user_avatar.js中的window.parent.getUserInfo();代码无法调用到下面这个function
 function getUserInfo() {
   $.ajax({
     method: 'GET',

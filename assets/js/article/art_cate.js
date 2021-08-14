@@ -1,5 +1,6 @@
 $(function () {
 
+  // 【--获取文章分类列表
   initArtCateList()
   // 获取文章分类的列表的函数
   function initArtCateList() {
@@ -13,6 +14,7 @@ $(function () {
     })
   }
 
+  // 【--添加文章分类
   // 点击按钮弹出添加类别的对话框
   var layer = layui.layer
   var indexAdd = null
@@ -47,6 +49,8 @@ $(function () {
     })
   })
 
+
+  //【--修改文章分类
   // 通过代理的形式，为btn-edit按钮绑定点击事件。点击编辑按钮，弹出对话框。
   var indexEdit = null;
   var form = layui.form
@@ -89,6 +93,8 @@ $(function () {
     })
   })
 
+
+  //【--删除文章分类
   // 通过代理的形式，为删除按钮绑定点击事件
   $('tbody').on('click', '.btn-delete', function () {
     var id = $(this).attr('data-id')
@@ -108,8 +114,6 @@ $(function () {
           initArtCateList();
         }
       })
-
-      layer.close(index);
     });
   })
 

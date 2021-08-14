@@ -47,7 +47,7 @@ $(function () {
     var files = e.target.files
     // 判断用户是否选择了文件
     if (files.length === 0) {
-      return
+      return layer.msg('请选择图片')
     }
     // 根据文件，创建对应的URL地址
     var newImgURL = URL.createObjectURL(files[0])
@@ -127,7 +127,7 @@ $(function () {
           return layer.msg(msg.failure)
         }
         layer.msg(msg.success)
-        // 清除全局的单篇文章标记
+        // 清除本js文件中全局的编辑文章标记
         artId = null;
         // 发布文章成功后，跳转到文章列表页面。设定一个计时器，这样可以让修改成功的提示显示出来，再跳转。
         setTimeout("location.href = '/article/art_list.html'", 1000)
@@ -165,7 +165,7 @@ $(function () {
         })
 
         // 设置图片
-        // 为裁剪区域重新设置图片
+        // 为裁剪区域重新设置图片(数据库存的上回提交的封面图片)
         // var artImgURL = 'http://api-breakingnews-web.itheima.net' + res.data.cover_img
         var artImgURL = 'http://127.0.0.1:3007' + res.data.cover_img
 
@@ -180,6 +180,5 @@ $(function () {
       }
     })
   }
-
 
 })
